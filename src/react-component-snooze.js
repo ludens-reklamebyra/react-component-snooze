@@ -52,6 +52,6 @@ export default class Snooze extends React.Component<Props, State> {
     const { open, closing } = this.state;
     const { snoozeHandler } = this;
 
-    return children({ snoozeHandler, open, closing });
+    return open ? children({ snoozeHandler, closing }) : null;
   }
 }

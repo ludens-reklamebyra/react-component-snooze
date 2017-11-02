@@ -2,7 +2,7 @@
 import * as React from 'react';
 
 interface SnoozeInterface {
-  open: boolean;
+  triggerClose: Function;
   closing: boolean;
 }
 
@@ -20,17 +20,14 @@ type State = {
 };
 
 export default class Snooze extends React.Component<Props, State> {
+  timeout = null;
   state = {
     open: this.props.open || false,
     closing: this.props.closing || false,
     snooze: this.props.snooze || 120
   };
 
-  componentWillUnmount() {
-    clearInterval(this.interval);
-  }
-
-  snoozeHandler = e => {
+  triggerClose = (e: Event): void => {
     const { open, snooze } = this.state;
 
     e.preventDefault();
@@ -50,8 +47,8 @@ export default class Snooze extends React.Component<Props, State> {
   render() {
     const { children } = this.props;
     const { open, closing } = this.state;
-    const { snoozeHandler } = this;
+    const { triggerClose } = this;
 
-    return open ? children({ snoozeHandler, closing }) : null;
+    return open ? children({ triggerClose, closing }) : null;
   }
 }

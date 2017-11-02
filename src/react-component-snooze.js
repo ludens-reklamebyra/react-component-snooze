@@ -9,26 +9,29 @@ interface SnoozeInterface {
 type Props = {
   children: SnoozeInterface => React.Node,
   open: boolean,
-  closing: boolean
+  closing: boolean,
+  snooze: number
 };
 
 type State = {
   open: boolean,
-  closing: boolean
+  closing: boolean,
+  snooze: number
 };
 
 export default class Snooze extends React.Component<Props, State> {
   state = {
     open: this.props.open || false,
-    closing: this.props.closing || false
+    closing: this.props.closing || false,
+    snooze: this.props.snooze || 120
   };
 
   componentWillUnmount() {
     clearInterval(this.interval);
   }
 
-  toggleHandler = e => {
-    const { open } = this.state;
+  snoozeHandler = e => {
+    const { open, snooze } = this.state;
 
     e.preventDefault();
 
@@ -36,7 +39,7 @@ export default class Snooze extends React.Component<Props, State> {
       this.setState({ closing: true });
       this.timeout = setTimeout(
         () => this.setState({ open: false, closing: false }),
-        120
+        snooze
       );
     } else {
       clearTimeout(this.timeout);
@@ -47,8 +50,8 @@ export default class Snooze extends React.Component<Props, State> {
   render() {
     const { children } = this.props;
     const { open, closing } = this.state;
-    const { toggleHandler } = this;
+    const { snoozeHandler } = this;
 
-    return children({ toggleHandler, open, closing });
+    return children({ snoozeHandler, open, closing });
   }
 }
